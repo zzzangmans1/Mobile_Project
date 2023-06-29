@@ -3,7 +3,7 @@ import { View, TextInput, Button} from 'react-native';
 
 import styles from '../styles/style';
 
-import { getDatabase, ref, set, push, query, orderByChild, equalTo, onValue, queryRef } from "firebase/database";
+import { getDatabase, ref, set, push, query, orderByChild, equalTo, onValue } from "firebase/database";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -36,7 +36,7 @@ const SignUpScreen = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [phonenum, setPhonenum] = useState('');
     const [birthday, setBirthday] = useState('');
-
+    
     const dataRef = ref(database, "members");   // 디비 설정
 
     // 아이디 중복인지 체크하는 함수
@@ -58,17 +58,19 @@ const SignUpScreen = ({ navigation }) => {
         // 회원가입 실패 처리
         if (!userid || !password || !username || !phonenum || !birthday){
             alert('입력을 다해주세요.');
-            return;
         }
         else if (phonenum.length > 0 && phonenum.length <= 11){ 
             const newUserRef = push(dataRef); // push : 고유한 해쉬값을 넣어준다.
             set(newUserRef, {                          // 디비 입력
                 userid: userid,
-                password: password,
+                password: password, 
                 username: username,
                 phonenum: phonenum,
-                birthday: birthday  
+                birthday: birthday,
+                uid: newUserRef.key,
             });
+            alert('회원가입이 완료되었습니다. 로그인창으로 이동합니다.');
+            navigation.navigate('로그인');
         }
         // 회원가입 성공 처리
         else { 
