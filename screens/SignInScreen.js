@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TextInput, Button } from 'react-native';
 
-const LoginScreen = ({ navigation }) => {
+import styles from '../styles/style';
+
+const SiginInScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const onLogin = () => {
+  const onSignIn = () => {
     // 로그인 로직 구현
     if (username === 'admin' && password === 'password') {
       navigation.navigate('Home', { username });
@@ -17,51 +19,31 @@ const LoginScreen = ({ navigation }) => {
 
   // 회원가입 로직 구현
   const onSignUp = () => {
-
+    navigation.navigate('회원가입');
   }
 
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
+        style={styles.textinput}
         placeholder="Username"
         value={username}
         onChangeText={setUsername}
       />
       <TextInput
-        style={styles.input}
+        style={styles.textinput}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
       <View style={styles.button}>
-        <Button title="Login" onPress={onLogin} />
-        <Button title="Signin" onPress={onLogin} />
+        <Button title="로그인" onPress={onSignIn} />
+        <Button title="회원가입" onPress={onSignUp} />  
       </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
-  input: {
-    width: '100%', //
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    marginBottom: 16,
-    paddingHorizontal: 10,
-  },
-  button: {
-    flexDirection: 'row',
-  },
-});
 
-export default LoginScreen;
+export default SiginInScreen;
