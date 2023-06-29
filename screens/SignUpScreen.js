@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Button} from 'react-native';
+import { View, TextInput, Button} from 'react-native';
 
 import styles from '../styles/style';
 
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, set, push, query, orderByChild, equalTo, onValue, queryRef } from "firebase/database";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -37,20 +37,44 @@ const SignUpScreen = ({ navigation }) => {
     const [phonenum, setPhonenum] = useState('');
     const [birthday, setBirthday] = useState('');
 
-    const onSignUpSec = () => {
-        // 회원가입 성공 처리
-        const dataRef = ref(database, "members");
-        set(dataRef, {
-            userid: userid,
-            password: password,
-            username: username,
-            phonenum: phonenum,
-            birthday: birthday
-        });
-        
-        // 회원가입 실패 처리
-      };
+    const dataRef = ref(database, "members");   // 디비 설정
 
+    // 아이디 중복인지 체크하는 함수
+    const onCheckId = async () => {
+        const idQuery = query(dataRef, orderByChild("userid"), equalTo(userid));
+        // 쿼리 수행 및 결과 처리
+        onValue(idQuery, (snapshot) => {
+            if (snapshot.exists()) {
+            // 아이디가 존재하는 경우
+                alert("아이디가 이미 존재합니다.");
+            } else {
+                // 아이디가 존재하지 않는 경우
+                alert("아이디를 사용할 수 있습니다.");
+            }
+        })
+    };
+
+    const onSignUpSec = () => {
+        // 회원가입 실패 처리
+        if (!userid || !password || !username || !phonenum || !birthday){
+            alert('입력을 다해주세요.');
+            return;
+        }
+        else if (phonenum.length > 0 && phonenum.length <= 11){ 
+            const newUserRef = push(dataRef); // push : 고유한 해쉬값을 넣어준다.
+            set(newUserRef, {                          // 디비 입력
+                userid: userid,
+                password: password,
+                username: username,
+                phonenum: phonenum,
+                birthday: birthday  
+            });
+        }
+        // 회원가입 성공 처리
+        else { 
+            alert('폰 번호를 제대로 입력해주세요.');
+        }
+      };
     return (
         <View style={styles.container}>
             <View >
@@ -60,6 +84,7 @@ const SignUpScreen = ({ navigation }) => {
                     value={userid}
                     onChangeText={setUserid}
                 />
+                <Button title="아이디 검사" onPress={onCheckId}/>
                 {/* 
                 onChangeText : TextInput 값이 변경될때마다 저장
                */} 
