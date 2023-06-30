@@ -3,7 +3,7 @@ import { View, TextInput, Button} from 'react-native';
 
 import styles from '../styles/style';
 
-import { getDatabase, ref, set, push, query, orderByChild, equalTo, onValue } from "firebase/database";
+import { getDatabase, ref, set, push, query, orderByChild, equalTo, get } from "firebase/database";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -34,13 +34,13 @@ const isPhone = /^010\d{4}\d{4}$/;
 
 const SignUpScreen = ({ navigation }) => {
 
-    const [isCheckID, setIsCheckID] = useState(false);
     const [userid, setUserid] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [phonenum, setPhonenum] = useState('');
     const [birthday, setBirthday] = useState('');
     
+    const [isCheckID, setIsCheckID] = useState(false);
 
     const dataRef = ref(database, "members");   // 디비 설정
 
@@ -63,22 +63,21 @@ const SignUpScreen = ({ navigation }) => {
                 phonenum: phonenum,
                 birthday: birthday,
                 uid: newUserRef.key,
+
             });
             alert('회원가입이 완료되었습니다. 로그인창으로 이동합니다.');
             navigation.navigate('로그인');
         }
       };
       // 아이디 중복, 정규식 체크하는 함수
-      const onCheckId = () => {
-          const idQuery = query(dataRef, orderByChild("userid"), equalTo(userid));
-          // 쿼리 수행 및 결과 처리
-          onValue(idQuery, (snapshot) => {
-            if(){
-
-            }if (snapshot.exists()) {
+      const onCheckId = async () => {
+            const idQuery = query(dataRef, orderByChild("userid"), equalTo(userid))
+            console.log(idQuery)
+            const snapshot = await get(idQuery)
+            // 쿼리 수행 및 결과 처리
+            if (snapshot.exists()) {
                 alert("아이디가 이미 존재합니다.");
                 setIsCheckID(false);
-                console.log(isCheckID)
             }else if (!userid) {
                 alert('아이디를 입력해주세요.')
             }else if (!(userid.length > 6 && userid.length < 13)){
@@ -89,7 +88,7 @@ const SignUpScreen = ({ navigation }) => {
                 alert(`아이디를 ${userid} 사용할 수 있습니다.`);
                 setIsCheckID(true);
             }
-          })
+          
       };
     return (
         <View style={styles.container}>
