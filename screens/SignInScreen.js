@@ -24,10 +24,11 @@ const SiginInScreen = ({ navigation }) => {
 
     // 로그인 로직 구현
     if (idRes.exists() && passRes.exists()) {
-      navigation.navigate('Home', { username });
+      console.log(userid)
+      navigation.navigate('Home', { userid });
     } else {
       // 로그인 실패 처리
-      alert('Invalid username or password');
+      alert('로그인에 실패하였습니다.');
     }
   };
 
