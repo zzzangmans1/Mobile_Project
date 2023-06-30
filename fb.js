@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, set, push, query, orderByChild, equalTo, get } from "firebase/database";
+import { getDatabase, ref, set, push, query,val, orderByChild, equalTo, get } from "firebase/database";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCfVkqOfkxzOehXuoUuJp0wRrFq3DZBnco",
@@ -13,5 +13,8 @@ const firebaseConfig = {
     measurementId: "G-N3HVR0CCGR"
   };
 
-export { initializeApp,getDatabase, ref, set, push, query, orderByChild, equalTo, get }
-export default firebaseConfig
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+export { database, ref, set, push,val, query, orderByChild, equalTo, get }

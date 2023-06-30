@@ -2,16 +2,13 @@ import React, { useImperativeHandle, useState } from 'react';
 import { View, TextInput, Button} from 'react-native';
 
 import styles from '../styles/style';
-import firebaseConfig, {initializeApp,getDatabase, ref, set, push, query, orderByChild, equalTo, get } from "../fb";
+import {database ,ref, set, push, query, orderByChild, equalTo, get } from "../fb";
 
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
 
 // 정규식
 const isNum = /[0-9]/; //숫자
 const isArp = /[a-zA-Z]/; //영어
+const isHangeul = /^[가-힣]{2,6}$/; // 2~6 글자 한글
 const isPhone = /^010\d{4}\d{4}$/;
 
 const SignUpScreen = ({ navigation }) => {
@@ -34,9 +31,10 @@ const SignUpScreen = ({ navigation }) => {
             alert('아이디 중복을 체크해주세요.')
         } else if (!(phonenum.length > 0 && phonenum.length <= 11) || !isPhone.test(phonenum)){ 
             alert('폰 번호를 제대로 입력해주세요.');
+        } else if (!(isHangeul.test(username))) {
+            alert('이름을 제대로 입력해주세요.')
         }
-        // 회원가입 성공 처리
-        else {
+        else { // 회원가입 성공 처리
             const newUserRef = push(dataRef); // push : 고유한 해쉬값을 넣어준다.
             set(newUserRef, {                          // 디비 입력
                 userid: userid,
@@ -86,6 +84,7 @@ const SignUpScreen = ({ navigation }) => {
                     style={styles.textinput} 
                     placeholder="패스워드"
                     value={password}
+                    secureTextEntry={true}
                     onChangeText={setPassword}
                 />
                 <TextInput

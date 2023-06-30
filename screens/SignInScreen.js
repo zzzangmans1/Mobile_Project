@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button } from 'react-native';
 
 import styles from '../styles/style';
 
-import firebaseConfig, {initializeApp,getDatabase, ref, set, push, query, orderByChild, equalTo, get } from "../fb";
+import {database ,ref, set, push,val, query, orderByChild, equalTo, get } from "../fb";
+import { DataSnapshot } from 'firebase/database';
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
 
 const SiginInScreen = ({ navigation }) => {
 
@@ -24,8 +22,11 @@ const SiginInScreen = ({ navigation }) => {
 
     // 로그인 로직 구현
     if (idRes.exists() && passRes.exists()) {
-      console.log(userid)
-      navigation.navigate('Home', { userid });
+      const userData  = idRes.val()
+      const firstUserId = Object.keys(userData)[0];   // userData에서 첫 번쨰 uid 값을 가져와서 저장
+      const username = userData[firstUserId].username;  // uid 값의 username 가져온다.
+      
+      navigation.navigate('Home', { username });
     } else {
       // 로그인 실패 처리
       alert('로그인에 실패하였습니다.');
@@ -36,7 +37,6 @@ const SiginInScreen = ({ navigation }) => {
   const onSignUp = () => {
     navigation.navigate('회원가입');
   }
-
   return (
     <View style={styles.container}>
       <TextInput
@@ -50,7 +50,7 @@ const SiginInScreen = ({ navigation }) => {
         placeholder="비밀번호를 입력해주세요."
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        secureTextEntry={true}
       />
       <View style={styles.button}>
         <Button title="로그인" onPress={onSignIn} />
