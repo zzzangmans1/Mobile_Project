@@ -3,13 +3,27 @@ import { StyleSheet, View, TextInput, Button } from 'react-native';
 
 import styles from '../styles/style';
 
+import firebaseConfig, {initializeApp,getDatabase, ref, set, push, query, orderByChild, equalTo, get } from "../fb";
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
 const SiginInScreen = ({ navigation }) => {
-  const [username, setUsername] = useState('');
+
+  const [userid, setUserid] = useState('');
   const [password, setPassword] = useState('');
 
-  const onSignIn = () => {
+  const dataRef = ref(database, "members");   // 디비 설정
+
+  const onSignIn = async () => {
+    const idQuery = query(dataRef, orderByChild("userid"), equalTo(userid))
+    const idRes = await get(idQuery);
+    const passQuery = query(dataRef, orderByChild("password"), equalTo(password))
+    const passRes = await get(passQuery);
+
     // 로그인 로직 구현
-    if (username === 'admin' && password === 'password') {
+    if (idRes.exists() && passRes.exists()) {
       navigation.navigate('Home', { username });
     } else {
       // 로그인 실패 처리
@@ -26,13 +40,13 @@ const SiginInScreen = ({ navigation }) => {
     <View style={styles.container}>
       <TextInput
         style={styles.textinput}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="아이디를 입력해주세요."
+        value={userid}
+        onChangeText={setUserid}
       />
       <TextInput
         style={styles.textinput}
-        placeholder="Password"
+        placeholder="비밀번호를 입력해주세요."
         value={password}
         onChangeText={setPassword}
         secureTextEntry

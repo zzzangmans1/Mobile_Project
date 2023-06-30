@@ -2,26 +2,8 @@ import React, { useImperativeHandle, useState } from 'react';
 import { View, TextInput, Button} from 'react-native';
 
 import styles from '../styles/style';
+import firebaseConfig, {initializeApp,getDatabase, ref, set, push, query, orderByChild, equalTo, get } from "../fb";
 
-import { getDatabase, ref, set, push, query, orderByChild, equalTo, get } from "firebase/database";
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCfVkqOfkxzOehXuoUuJp0wRrFq3DZBnco",
-  authDomain: "orderaphone.firebaseapp.com",
-  projectId: "orderaphone",
-  storageBucket: "orderaphone.appspot.com",
-  messagingSenderId: "127130382614",
-  appId: "1:127130382614:web:c022ca0c6684b447b86037",
-  measurementId: "G-N3HVR0CCGR"
-};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -63,7 +45,6 @@ const SignUpScreen = ({ navigation }) => {
                 phonenum: phonenum,
                 birthday: birthday,
                 uid: newUserRef.key,
-
             });
             alert('회원가입이 완료되었습니다. 로그인창으로 이동합니다.');
             navigation.navigate('로그인');
@@ -72,12 +53,11 @@ const SignUpScreen = ({ navigation }) => {
       // 아이디 중복, 정규식 체크하는 함수
       const onCheckId = async () => {
             const idQuery = query(dataRef, orderByChild("userid"), equalTo(userid))
-            console.log(idQuery)
             const snapshot = await get(idQuery)
             // 쿼리 수행 및 결과 처리
             if (snapshot.exists()) {
                 alert("아이디가 이미 존재합니다.");
-                setIsCheckID(false);
+                setIsCheckID(false)
             }else if (!userid) {
                 alert('아이디를 입력해주세요.')
             }else if (!(userid.length > 6 && userid.length < 13)){
@@ -85,10 +65,9 @@ const SignUpScreen = ({ navigation }) => {
             }else if(!(isNum.test(userid) && isArp.test(userid))) {
                 alert('아이디를 영어와 숫자를 조합하여 만들어주세요.')
             }else {
-                alert(`아이디를 ${userid} 사용할 수 있습니다.`);
-                setIsCheckID(true);
+                alert(`아이디를 ${userid} 사용할 수 있습니다.`)
+                setIsCheckID(true)
             }
-          
       };
     return (
         <View style={styles.container}>
