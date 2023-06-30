@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { View, TextInput, Button} from 'react-native';
 
 import styles from '../styles/style';
@@ -27,39 +27,34 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-
+// 정규식
+const isNum = /[0-9]/; //숫자
+const isArp = /[a-zA-Z]/; //영어
+const isPhone = /^010\d{4}\d{4}$/;
 
 const SignUpScreen = ({ navigation }) => {
 
+    const [isCheckID, setIsCheckID] = useState(false);
     const [userid, setUserid] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [phonenum, setPhonenum] = useState('');
     const [birthday, setBirthday] = useState('');
     
-    const dataRef = ref(database, "members");   // 디비 설정
 
-    // 아이디 중복인지 체크하는 함수
-    const onCheckId = async () => {
-        const idQuery = query(dataRef, orderByChild("userid"), equalTo(userid));
-        // 쿼리 수행 및 결과 처리
-        onValue(idQuery, (snapshot) => {
-            if (snapshot.exists()) {
-            // 아이디가 존재하는 경우
-                alert("아이디가 이미 존재합니다.");
-            } else {
-                // 아이디가 존재하지 않는 경우
-                alert("아이디를 사용할 수 있습니다.");
-            }
-        })
-    };
+    const dataRef = ref(database, "members");   // 디비 설정
 
     const onSignUpSec = () => {
         // 회원가입 실패 처리
         if (!userid || !password || !username || !phonenum || !birthday){
-            alert('입력을 다해주세요.');
+            alert('입력을 다해주세요.')
+        } else if (!isCheckID) {
+            alert('아이디 중복을 체크해주세요.')
+        } else if (!(phonenum.length > 0 && phonenum.length <= 11) || !isPhone.test(phonenum)){ 
+            alert('폰 번호를 제대로 입력해주세요.');
         }
-        else if (phonenum.length > 0 && phonenum.length <= 11){ 
+        // 회원가입 성공 처리
+        else {
             const newUserRef = push(dataRef); // push : 고유한 해쉬값을 넣어준다.
             set(newUserRef, {                          // 디비 입력
                 userid: userid,
@@ -72,10 +67,29 @@ const SignUpScreen = ({ navigation }) => {
             alert('회원가입이 완료되었습니다. 로그인창으로 이동합니다.');
             navigation.navigate('로그인');
         }
-        // 회원가입 성공 처리
-        else { 
-            alert('폰 번호를 제대로 입력해주세요.');
-        }
+      };
+      // 아이디 중복, 정규식 체크하는 함수
+      const onCheckId = () => {
+          const idQuery = query(dataRef, orderByChild("userid"), equalTo(userid));
+          // 쿼리 수행 및 결과 처리
+          onValue(idQuery, (snapshot) => {
+            if(){
+
+            }if (snapshot.exists()) {
+                alert("아이디가 이미 존재합니다.");
+                setIsCheckID(false);
+                console.log(isCheckID)
+            }else if (!userid) {
+                alert('아이디를 입력해주세요.')
+            }else if (!(userid.length > 6 && userid.length < 13)){
+                alert('아이디의 길이를 7~12자로 맞춰주세요')
+            }else if(!(isNum.test(userid) && isArp.test(userid))) {
+                alert('아이디를 영어와 숫자를 조합하여 만들어주세요.')
+            }else {
+                alert(`아이디를 ${userid} 사용할 수 있습니다.`);
+                setIsCheckID(true);
+            }
+          })
       };
     return (
         <View style={styles.container}>
@@ -108,6 +122,7 @@ const SignUpScreen = ({ navigation }) => {
                     value={phonenum}
                     onChangeText={setPhonenum} 
                 />
+                <Button title="휴대폰 검사" onPress={onCheckId}/>
                 <TextInput 
                     style={styles.textinput} 
                     placeholder="생년월일"
