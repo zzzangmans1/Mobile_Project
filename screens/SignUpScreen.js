@@ -8,18 +8,21 @@ import {database ,ref, set, push, query, orderByChild, equalTo, get } from "../f
 // 정규식
 const isNum = /[0-9]/; //숫자
 const isArp = /[a-zA-Z]/; //영어
+const isPass = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,12}$/
 const isHangeul = /^[가-힣]{2,6}$/; // 2~6 글자 한글
 const isPhone = /^010\d{4}\d{4}$/;
-
+const isBirth = /\d{4}\d{2}\d{2}$/;
 const SignUpScreen = ({ navigation }) => {
 
     const [userid, setUserid] = useState('');
     const [password, setPassword] = useState('');
+    const [repassword, setRePassword] = useState('');
     const [username, setUsername] = useState('');
     const [phonenum, setPhonenum] = useState('');
     const [birthday, setBirthday] = useState('');
     
     const [isCheckID, setIsCheckID] = useState(false);
+    const [isCheckPass, setIsCheckPass] = useState(false);
 
     const dataRef = ref(database, "members");   // 디비 설정
 
@@ -29,12 +32,17 @@ const SignUpScreen = ({ navigation }) => {
             alert('입력을 다해주세요.')
         } else if (!isCheckID) {
             alert('아이디 중복을 체크해주세요.')
-        } else if (!(phonenum.length > 0 && phonenum.length <= 11) || !isPhone.test(phonenum)){ 
+        } else if (!isPhone.test(phonenum)){ 
             alert('폰 번호를 제대로 입력해주세요.');
         } else if (!(isHangeul.test(username))) {
             alert('이름을 제대로 입력해주세요.')
-        }
-        else { // 회원가입 성공 처리
+        } else if (!(isBirth.test(birthday))){
+            alert('생년월일을 제대로 입력해주세요.')
+        } else if (!(isPass.test(password))){
+            alert('특수문주와 숫자를 조합하여 8~12자리를 만들어 입력해주세요.')
+        } else if (password != repassword){
+            alert('패스워드가 같지 않습니다 다시 입력해주세요.')
+        }else { // 회원가입 성공 처리
             const newUserRef = push(dataRef); // push : 고유한 해쉬값을 넣어준다.
             set(newUserRef, {                          // 디비 입력
                 userid: userid,
@@ -86,6 +94,13 @@ const SignUpScreen = ({ navigation }) => {
                     value={password}
                     secureTextEntry={true}
                     onChangeText={setPassword}
+                />
+                <TextInput 
+                style={styles.textinput} 
+                placeholder="패스워드 검사"
+                value={repassword}
+                secureTextEntry={true}
+                onChangeText={setRePassword}
                 />
                 <TextInput
                     style={styles.textinput} 
