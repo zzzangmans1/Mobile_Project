@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { View, TextInput, Button} from 'react-native';
+import { View, TextInput, Button, SafeAreaView} from 'react-native';
 
 import styles from '../styles/style';
 import {database ,ref, set, push, query, orderByChild, equalTo, get } from "../fb";
@@ -76,8 +76,8 @@ const SignUpScreen = ({ navigation }) => {
             }
       };
     return (
-        <View style={styles.container}>
-            <View >
+        <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
                 <TextInput 
                     style={styles.textinput} 
                     placeholder="아이디"
@@ -87,7 +87,7 @@ const SignUpScreen = ({ navigation }) => {
                 <Button title="아이디 검사" onPress={onCheckId}/>
                 {/* 
                 onChangeText : TextInput 값이 변경될때마다 저장
-               */} 
+            */} 
                 <TextInput 
                     style={styles.textinput} 
                     placeholder="패스워드"
@@ -96,11 +96,11 @@ const SignUpScreen = ({ navigation }) => {
                     onChangeText={setPassword}
                 />
                 <TextInput 
-                style={styles.textinput} 
-                placeholder="패스워드 검사"
-                value={repassword}
-                secureTextEntry={true}
-                onChangeText={setRePassword}
+                    style={styles.textinput} 
+                    placeholder="패스워드 검사"
+                    value={repassword}
+                    secureTextEntry={true}
+                    onChangeText={setRePassword}
                 />
                 <TextInput
                     style={styles.textinput} 
@@ -125,7 +125,7 @@ const SignUpScreen = ({ navigation }) => {
             <View>
                 <Button title="완료" onPress={onSignUpSec}/>
             </View>
-        </View>
+        </SafeAreaView>
       );
 };
 export default SignUpScreen;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { View, Text, Button, SafeAreaView  } from 'react-native';
 
 import styles from '../styles/style';
 
@@ -11,10 +11,19 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome to {username} 님!</Text>
-      <Button title="Logout" onPress={onLogout} />
-    </View>
+    <SafeAreaView style={styles.container}>
+        <View style={styles.topview}>
+          <Text>Welcome to {username} 님!</Text>
+          <Button title="Logout" onPress={onLogout} />
+          <Button title="마이페이지" />
+        </View>
+        <View style={styles.midview}>
+        <Text style={styles.title}>Welcome to {username} 님!</Text>
+        </View>
+        <View style={styles.bottomview}>
+        <Text style={styles.title}>Welcome to {username} 님!</Text>
+        </View>
+    </SafeAreaView>
   );
 };
 

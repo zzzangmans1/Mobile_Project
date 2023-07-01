@@ -1,11 +1,25 @@
-import { StyleSheet} from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 16,
+        flex: 1,
+    },
+    header:{
+        backgroundColor: 'yellow',
+        height: '20%',
+        width: '100%',
+        flexDirection: 'row',
+    },
+    content:{
+        backgroundColor: 'blue',
+        height: '60%',
+        width: '100%',
+    },
+    footer:{
+        
+        backgroundColor: 'green',
+        height: '20%',
+        width: '100%',
     },
     text: {
       fontSize: 24,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, SafeAreaView } from 'react-native';
 
 import styles from '../styles/style';
 
@@ -25,7 +25,6 @@ const SiginInScreen = ({ navigation }) => {
       const userData  = idRes.val()
       const firstUserId = Object.keys(userData)[0];   // userData에서 첫 번쨰 uid 값을 가져와서 저장
       const username = userData[firstUserId].username;  // uid 값의 username 가져온다.
-      
       navigation.navigate('Home', { username });
     } else {
       // 로그인 실패 처리
@@ -38,7 +37,11 @@ const SiginInScreen = ({ navigation }) => {
     navigation.navigate('회원가입');
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+
+      </View>
+      <View style={styles.content}>
       <TextInput
         style={styles.textinput}
         placeholder="아이디를 입력해주세요."
@@ -52,11 +55,12 @@ const SiginInScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry={true}
       />
-      <View style={styles.button}>
-        <Button title="로그인" onPress={onSignIn} />
-        <Button title="회원가입" onPress={onSignUp} />  
+      <Button title="로그인" onPress={onSignIn} />
+      <Button title="회원가입" onPress={onSignUp} /> 
       </View>
-    </View>
+      <View style={styles.footer}>
+      </View>
+    </SafeAreaView>
   );
 };
 
