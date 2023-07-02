@@ -11,12 +11,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     content:{
-        backgroundColor: 'blue',
+        backgroundColor: 'white',
         height: '60%',
         width: '100%',
+        flexDirection: 'row',
     },
     footer:{
-        
         backgroundColor: 'green',
         height: '20%',
         width: '100%',
@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 30,
-        width: "90%",
         borderWidth: 1,
         borderColor: 'black',
     },
