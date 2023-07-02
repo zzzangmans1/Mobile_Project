@@ -22,9 +22,9 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     text: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      marginBottom: 16,
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 16,
     },
     textinput: {
         justifyContent: 'center',

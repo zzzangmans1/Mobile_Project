@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, SafeAreaView} from 'react-native';
+import { View, TextInput, Button, SafeAreaView, Text} from 'react-native';
 
 import styles from '../styles/style';
 import {database ,ref, set, push, query, orderByChild, equalTo, get } from "../fb";
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 // 정규식
@@ -80,7 +81,10 @@ const SignUpScreen = ({ navigation }) => {
         setRePassword(text)
         if((password === text) && !isCheckPass){
             setIsCheckPass(true)
+        } else if ((password !== text) && isCheckPass){
+            setIsCheckPass(false)
         }
+
     }
     return (
         <SafeAreaView style={styles.container}>
@@ -102,6 +106,7 @@ const SignUpScreen = ({ navigation }) => {
                     secureTextEntry={true}
                     onChangeText={setPassword}
                 />
+
                 <TextInput 
                     style={styles.textinput} 
                     placeholder="패스워드 검사"
@@ -109,6 +114,11 @@ const SignUpScreen = ({ navigation }) => {
                     secureTextEntry={true}
                     onChangeText={onChangePass}
                 />
+                {isCheckPass && (
+                <Text style={{color: 'green'}}>
+                    두 패스워드가 같습니다.
+                    </Text>
+                )} 
                 <TextInput
                     style={styles.textinput} 
                     placeholder="이름"
