@@ -12,13 +12,15 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const [discription, setDiscription] = useState('');
 
     const onWriteSuc = () => {  // 로그아웃 로직 구현
-        set(dataRef, {                          // 디비 입력
+        const newPostRef = push(dataRef);
+        set(newPostRef, {                          // 디비 입력
             title: title,
             discription: discription,
         });
         alert('게시글 작성이 완료되었습니다.')
         navigation.navigate('Home', { username, isAdmin })
       }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
