@@ -9,9 +9,10 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const { username, isAdmin } = route.params;
 
     const [title, setTitle] = useState('');
-    const [discription, setDiscription] = useState('');
-    const [authour] = useState(username);
+    const [description, setDescription] = useState('');
+    const [author] = useState(username);
 
+    // 시간 관련
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth() + 1;
@@ -20,20 +21,26 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
     const currenttime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
+
     const onWriteSuc = () => {  // 게시판 완료
-        if(!title || !discription){
+        if(!title || !description){
             alert(`제목과 본문을 입력해주세요.`)
         } else {
-            console.log(currenttime)
-            const newPostRef = push(dataRef);
-            set(newPostRef, {                          // 디비 입력
-                title: title,
-                discription: discription,
-                authour: authour,
-                time: currenttime,
-            })
-            alert('게시글 작성이 완료되었습니다.')
-            navigation.navigate('Home', { username, isAdmin })
+            try {
+                console.log(currenttime)
+                const newPostRef = push(dataRef);
+                set(newPostRef, {                          // 디비 입력
+                    title: title,
+                    description: description,
+                    author: author,
+                    time: currenttime,
+                })
+                alert('게시글 작성이 완료되었습니다.')
+                navigation.navigate('Home', { username, isAdmin })
+            }
+            catch (error){
+                alert('게시글 작성이 실패하였습니다.', error)
+            }
         }
       }
 
@@ -49,8 +56,8 @@ const WriteBoardScreen = ({ navigation, route }) => {
                 />
                 <TextInput
                     placeholder="본문을 입력해주세요."
-                    value={discription}
-                    onChangeText={setDiscription}
+                    value={description}
+                    onChangeText={setDescription}
                 />
             </View>
             <View style={styles.footer}>  
