@@ -3,7 +3,7 @@ import { View, TextInput, Button, SafeAreaView } from 'react-native';
 
 import styles from '../styles/style';
 
-import {database ,ref, set, push,val, query, orderByChild, equalTo, get } from "../fb";
+import {database ,ref, query, orderByChild, equalTo, get } from "../fb";
 
 
 

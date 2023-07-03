@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
+import WriteBoardScreen from './screens/WriteBoardScreen';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export default function App() {
         <Stack.Screen name="로그인" component={SignInScreen}  /> 
         <Stack.Screen name="회원가입" component={SignUpScreen}  /> 
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Board" component={WriteBoardScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

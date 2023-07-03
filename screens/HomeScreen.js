@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation, route }) => {
     navigation.navigate('로그인')
   }
   const onWrite = () => {
-    console.log(isAdmin)
+    navigation.navigate('Board', { username, isAdmin } )
   }
 
   const onSktBtn = () => {  // SKT 버튼을 눌렀을 때

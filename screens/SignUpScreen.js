@@ -12,6 +12,7 @@ const isPass = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()\-_=+{};:,<.>]
 const isHangeul = /^[가-힣]{2,6}$/; // 2~6 글자 한글
 const isPhone = /^010\d{4}\d{4}$/;
 const isBirth = /\d{4}\d{2}\d{2}$/;
+
 const SignUpScreen = ({ navigation }) => {
 
     const [userid, setUserid] = useState('');
@@ -106,7 +107,6 @@ const SignUpScreen = ({ navigation }) => {
                     secureTextEntry={true}
                     onChangeText={setPassword}
                 />
-
                 <TextInput 
                     style={styles.textinput} 
                     placeholder="패스워드 검사"
