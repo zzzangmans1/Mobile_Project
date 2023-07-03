@@ -10,8 +10,6 @@ import HomeScreen from './screens/HomeScreen';
 
 const Stack = createStackNavigator();
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

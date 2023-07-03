@@ -3,7 +3,6 @@ import { View, TextInput, Button, SafeAreaView, Text} from 'react-native';
 
 import styles from '../styles/style';
 import {database ,ref, set, push, query, orderByChild, equalTo, get } from "../fb";
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 // 정규식
@@ -84,11 +83,12 @@ const SignUpScreen = ({ navigation }) => {
         } else if ((password !== text) && isCheckPass){
             setIsCheckPass(false)
         }
-
     }
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
+            </View>
+            <View style={styles.content}>
                 <TextInput 
                     style={styles.textinput} 
                     placeholder="아이디"
@@ -138,8 +138,6 @@ const SignUpScreen = ({ navigation }) => {
                     value={birthday}
                     onChangeText={setBirthday} 
                 />
-            </View>
-            <View style={styles.content}>
                 <Button title="완료" onPress={onSignUpSuc}/>
             </View>
             <View style={styles.footer}>

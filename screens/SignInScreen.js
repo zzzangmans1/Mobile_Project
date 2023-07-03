@@ -4,7 +4,7 @@ import { View, TextInput, Button, SafeAreaView } from 'react-native';
 import styles from '../styles/style';
 
 import {database ,ref, set, push,val, query, orderByChild, equalTo, get } from "../fb";
-import { DataSnapshot } from 'firebase/database';
+
 
 
 const SiginInScreen = ({ navigation }) => {
@@ -27,7 +27,7 @@ const SiginInScreen = ({ navigation }) => {
       const username = userData[firstUserId].username;  // uid 값의 username 가져온다.
       const isAdmin = userData[firstUserId].isAdmin;
       navigation.navigate('Home', { username, isAdmin });
-      
+
     } else {
       // 로그인 실패 처리
       alert('로그인에 실패하였습니다.');
