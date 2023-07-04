@@ -69,14 +69,14 @@ const HomeScreen = ({ navigation, route }) => {
     }
   };
 
-  const onBoardItem = () => {
+  const onBoardItem = (item) => {
     console.log(`아이템을 누르셨습니다.`)
-    navigation.navigate('Board')
+    navigation.navigate('Board', {boardId: item.key})
   }
   
   const renderBoard = ({item}) => {   // 게시판 렌더 함수
     return(
-      <TouchableOpacity onPress={onBoardItem}>
+      <TouchableOpacity onPress={() => onBoardItem(item)}>
         <View style={{ padding: 10 }}>
           <Text> {item.title}</Text>
           <Text>작성자: {item.author}</Text>
