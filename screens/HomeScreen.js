@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation, route }) => {
 
   const onBoardItem = (item) => {
     console.log(`아이템을 누르셨습니다.`)
-    navigation.navigate('Board', {boardId: item.key})
+    navigation.navigate('Board', { username, userid, isAdmin, boardId: item.key})
   }
   
   const renderBoard = ({item}) => {   // 게시판 렌더 함수

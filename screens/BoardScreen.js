@@ -1,19 +1,19 @@
-import { View, Text, Button, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
+import { useId, useState } from 'react';
+import { View, Text, Button, SafeAreaView } from 'react-native';
 
 import styles from '../styles/style';
 
 import {database ,ref,set, push, query, orderByChild, equalTo, get } from "../fb";
-import { useState } from 'react';
+
 
 const dataRef = ref(database, "boards");   // 디비 설정
 
 const BoardScreen = ({ navigation, route }) => {
     
-    const { boardId } = route.params;
-
+    const { username, userid, isAdmin, boardId } = route.params;
     const [ title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [description, setDescription] = useState('')
+    const [ author, setAuthor] = useState('')
+    const [ description, setDescription] = useState('')
 
     const readBoard = async() => {
         try{
@@ -28,6 +28,9 @@ const BoardScreen = ({ navigation, route }) => {
         }
     }
     readBoard()
+    const onPreBtn = () => {
+        navigation.navigate('Home', {username, userid, isAdmin})
+    }
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -38,6 +41,7 @@ const BoardScreen = ({ navigation, route }) => {
                 <Text>{description}</Text>
             </View>
             <View style={styles.footer}>  
+                <Button title='완료' onPress={onPreBtn}></Button>
             </View>
         </SafeAreaView>
     )   
