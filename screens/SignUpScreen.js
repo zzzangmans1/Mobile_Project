@@ -29,7 +29,6 @@ const SignUpScreen = ({ navigation }) => {
 
     const onSignUpSuc = () => {
         // 회원가입 실패 처리
-        console.log(`여기는 onSignUpSuc() ${isCheckPass}`)
         if (!userid || !password || !username || !phonenum || !birthday){
             alert('입력을 다해주세요.')
         } else if (!isCheckID) {
@@ -52,6 +51,7 @@ const SignUpScreen = ({ navigation }) => {
                 username: username,
                 phonenum: phonenum,
                 birthday: birthday,
+                carrier : '',
                 uid: newUserRef.key,
             });
             alert('회원가입이 완료되었습니다. 로그인창으로 이동합니다.');

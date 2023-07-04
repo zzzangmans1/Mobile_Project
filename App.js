@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -8,6 +8,7 @@ import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
 import WriteBoardScreen from './screens/WriteBoardScreen';
+import BoardScreen from './screens/BoardScreen'
 
 const Stack = createStackNavigator();
 
@@ -31,7 +32,8 @@ export default function App() {
         <Stack.Screen name="로그인" component={SignInScreen}  /> 
         <Stack.Screen name="회원가입" component={SignUpScreen}  /> 
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Board" component={WriteBoardScreen} />
+        <Stack.Screen name="WriteBoard" component={WriteBoardScreen} />
+        <Stack.Screen name="Board" component={BoardScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

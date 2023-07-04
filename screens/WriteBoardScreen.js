@@ -6,11 +6,11 @@ import styles from '../styles/style';
 const dataRef = ref(database, "boards");   // 디비 설정
 
 const WriteBoardScreen = ({ navigation, route }) => {
-    const { username, isAdmin } = route.params;
+    const { username, userid, isAdmin } = route.params;
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [author] = useState(username);
+    const [author] = useState(userid);
 
     // 시간 관련
     const now = new Date();
@@ -36,7 +36,7 @@ const WriteBoardScreen = ({ navigation, route }) => {
                     time: currenttime,
                 })
                 alert('게시글 작성이 완료되었습니다.')
-                navigation.navigate('Home', { username, isAdmin })
+                navigation.navigate('Home', { username, userid, isAdmin })
             }
             catch (error){
                 alert('게시글 작성이 실패하였습니다.', error)

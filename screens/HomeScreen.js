@@ -1,9 +1,9 @@
 import React, { useState,useEffect   } from 'react';
-import { View, Text, Button, SafeAreaView, FlatList } from 'react-native';
+import { View, Text, Button, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 
 import styles from '../styles/style';
 
-import {database ,ref, set, push, query, orderByChild, equalTo, get } from "../fb";
+import {database ,ref,set, push, query, orderByChild, equalTo, get } from "../fb";
 
 const dataRef = ref(database, "boards");   // 디비 설정
 
@@ -13,7 +13,7 @@ const HomeScreen = ({ navigation, route }) => {
     readData(); // HomeScreen 컴포넌트가 처음 렌더링될 때 readData 함수 실행
   });
   
-  const { username, isAdmin } = route.params;
+  const { username, userid, isAdmin } = route.params;
   const [boardData, setBoardData] = useState([]);
 
   const [showButton, setShowButton] = useState(true)
@@ -24,7 +24,7 @@ const HomeScreen = ({ navigation, route }) => {
     navigation.navigate('로그인')
   }
   const onWrite = () => {
-    navigation.navigate('Board', { username, isAdmin } )
+    navigation.navigate('WriteBoard', { username, userid, isAdmin } )
   }
 
   const onSktBtn = () => {  // SKT 버튼을 눌렀을 때
@@ -47,6 +47,7 @@ const HomeScreen = ({ navigation, route }) => {
         setIsData(true)
         const data = snapshot.val();
         const keys = Object.keys(data); // 모든 고유 키 값 가져오기
+
         keys.forEach(key => {           // push()로 넣은 값을 다 가져온다.
           const newData = keys.map((key) =>{
             const specificData = data[key];
@@ -61,22 +62,28 @@ const HomeScreen = ({ navigation, route }) => {
         });
       } else {
         // 데이터가 존재하지 않는 경우
-        console.log("데이터가 존재하지 않습니다.");
+        // console.log("데이터가 존재하지 않습니다.");
       }
     } catch (error) {
       console.error("데이터 읽기 실패:", error);
     }
   };
-  
-  const renderBoard = ({item}) => {   
-    const { key, author, title,  description } = item;
-    return(
-    <View style={{ padding: 10 }}>
-      <Text> {title}</Text>
-      <Text>작성자: {author}</Text>
-      <Text> {description}</Text>
-    </View>)
+
+  const onBoardItem = () => {
+    console.log(`아이템을 누르셨습니다.`)
+    navigation.navigate('Board')
   }
+  
+  const renderBoard = ({item}) => {   // 게시판 렌더 함수
+    return(
+      <TouchableOpacity onPress={onBoardItem}>
+        <View style={{ padding: 10 }}>
+          <Text> {item.title}</Text>
+          <Text>작성자: {item.author}</Text>
+          <Text> {item.description}</Text>
+        </View>
+      </TouchableOpacity>
+    )}
 
   return (
     <SafeAreaView style={styles.container}>
@@ -100,7 +107,7 @@ const HomeScreen = ({ navigation, route }) => {
             {!isData && (
             <Text>아직 게시글이 존재하지 않습니다.</Text>
             )}
-            {isData && (
+            {isData && ( // data에 데이터가 생성되면 renderItem 함수 실행
               <FlatList
                 data={boardData}
                 renderItem={renderBoard}
@@ -110,7 +117,6 @@ const HomeScreen = ({ navigation, route }) => {
           </View>
           )}
         <View style={styles.footer}>  
-          <Text style={styles.title}>Welcome to {username} 님!</Text>
         </View>
     </SafeAreaView>
   );

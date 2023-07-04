@@ -25,8 +25,9 @@ const SiginInScreen = ({ navigation }) => {
       const userData  = idRes.val()
       const firstUserId = Object.keys(userData)[0];   // userData에서 첫 번쨰 uid 값을 가져와서 저장
       const username = userData[firstUserId].username;  // uid 값의 username 가져온다.
+      const userid = userData[firstUserId].userid
       const isAdmin = userData[firstUserId].isAdmin;
-      navigation.navigate('Home', { username, isAdmin });
+      navigation.navigate('Home', { username, userid, isAdmin });
 
     } else {
       // 로그인 실패 처리
