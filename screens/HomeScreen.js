@@ -17,45 +17,43 @@ const HomeScreen = ({ navigation, route }) => {
 
   useEffect(() => {
       readData()
-  });
+  }); // }, [carrierType])carrierType 변경 시에만 readData 함수 호출;
 
   const onLogout = () => {  // 로그아웃 로직 구현
     navigation.navigate('로그인')
   }
-  const onWrite = () => {
+  const onWriteBtn = () => {
     navigation.navigate('WriteBoard', { username, userid, carrier, isAdmin } )
-    readData();
   }
-
+  const onPreBtn = () => {
+    setShowButton(true)
+    setCarrierType('')
+  }
   const onSktBtn = () => {  // SKT 버튼을 눌렀을 때
     setShowButton(false)
     setCarrierType("SKT")
-    readData()
   }
   const onKtBtn = () => {  // SKT 버튼을 눌렀을 때
     setShowButton(false)
     setCarrierType('KT')
-    readData()
   }
   const onLGBtn = () => {  // SKT 버튼을 눌렀을 때
     setShowButton(false)
     setCarrierType('LG')
-    readData()
   }
   const readData = async () => {
+    console.log('hi')
     try {
       const snapshot = await get(dataRef); // 데이터 읽기
-      console.log('hi')
       if (snapshot.exists()) {
         // 데이터가 존재하는 경우
         setIsData(true)
         const data = snapshot.val();
         const keys = Object.keys(data); // 모든 고유 키 값 가져오기
-
         keys.forEach(key => {           // push()로 넣은 값을 다 가져온다.
-          const newData = keys.map((key) =>{
+          const newData = keys
+          .map((key) =>{
             const specificData = data[key];
-            console.log(carrierType)
             if(specificData.carrier === carrierType){
               return {
                 key,
@@ -64,7 +62,7 @@ const HomeScreen = ({ navigation, route }) => {
                 title: specificData.title,
                 description: specificData.description,
               };
-            }
+            } 
           }) 
           if (JSON.stringify(newData) !== JSON.stringify(boardData)) {  // 값이 변경되었을 때만 setBoardData 호출
             setBoardData(newData);
@@ -84,16 +82,20 @@ const HomeScreen = ({ navigation, route }) => {
   }
   
   const renderBoard = ({item}) => {   // 게시판 렌더 함수
-    return(
-      <TouchableOpacity onPress={() => onBoardItem(item)}>
-        <View style={{ padding: 10 }}>
-          <Text> {item.carrier}</Text>
-          <Text> {item.title}</Text>
-          <Text>작성자: {item.author}</Text>
-          <Text> {item.description}</Text>
-        </View>
-      </TouchableOpacity>
-    )}
+    if (item && item.carrier) {
+      return(
+        <TouchableOpacity onPress={() => onBoardItem(item)}>
+          <View style={{ padding: 10 }}>
+            <Text> {item.carrier}</Text>
+            <Text> {item.title}</Text>
+            <Text>작성자: {item.author}</Text>
+            <Text> {item.description}</Text>
+          </View>
+        </TouchableOpacity>
+      )
+    }
+    return null // item이 null이거나 'carrier' 속성이 없는 경우 아무것도 렌더하지 않음
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -112,8 +114,10 @@ const HomeScreen = ({ navigation, route }) => {
         {!showButton && (
           <View style={styles.content}>
             { writeButton && (    // isAdmin 이 True 여야만 게시글 작성 버튼이 생성
-            <Button title="게시글 작성" onPress={onWrite} />
-             
+              <>
+                <Button title="게시글 작성" onPress={onWriteBtn} /> 
+                <Button title="뒤로가기" onPress={onPreBtn} />
+              </>
             )}
             {!isData && (
             <Text>아직 게시글이 존재하지 않습니다.</Text>
