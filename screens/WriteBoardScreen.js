@@ -5,9 +5,14 @@ import styles from '../styles/style';
 
 const dataRef = ref(database, "boards");   // 디비 설정
 
+const titleRegex = /^(?!\s)[a-zA-Z0-9가-힣!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
+const descriptionRegex = /^(?!\s)[a-zA-Z0-9가-힣!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
+
+
 const WriteBoardScreen = ({ navigation, route }) => {
+
     const { username, userid, carrier, isAdmin } = route.params;
-    console.log(carrier)    
+    
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [author] = useState(userid);
@@ -25,7 +30,13 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const onWriteSuc = () => {  // 게시판 완료
         if(!title || !description){
             alert(`제목과 본문을 입력해주세요.`)
-        } else {
+        } else if (!(titleRegex.test(title))){
+            alert(`제목을 제대로 입력해주세요.`)
+            setTitle('')
+        } else if (!(descriptionRegex.test(description))){
+            alert(`본문을 제대로 입력해주세요.`)
+            setDescription('')
+        }else {
             try {
                 const newPostRef = push(dataRef);
                 set(newPostRef, {                          // 디비 입력
@@ -39,7 +50,6 @@ const WriteBoardScreen = ({ navigation, route }) => {
                 navigation.navigate('Home', { username, userid,carrier, isAdmin })
             }
             catch (error){
-                console.log(error)
                 alert('게시글 작성이 실패하였습니다.', error)
             }
         }
