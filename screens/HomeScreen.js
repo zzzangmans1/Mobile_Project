@@ -13,9 +13,9 @@ const HomeScreen = ({ navigation, route }) => {
     readData(); // HomeScreen 컴포넌트가 처음 렌더링될 때 readData 함수 실행
   });
   
-  const { username, userid, isAdmin } = route.params;
-  const [boardData, setBoardData] = useState([]);
-
+  const { username, userid, carrier, isAdmin } = route.params
+  const [boardData, setBoardData] = useState([])
+  
   const [showButton, setShowButton] = useState(true)
   const [writeButton] = useState(isAdmin)
   const [isData, setIsData] = useState(false)
@@ -24,7 +24,7 @@ const HomeScreen = ({ navigation, route }) => {
     navigation.navigate('로그인')
   }
   const onWrite = () => {
-    navigation.navigate('WriteBoard', { username, userid, isAdmin } )
+    navigation.navigate('WriteBoard', { username, userid, carrier, isAdmin } )
   }
 
   const onSktBtn = () => {  // SKT 버튼을 눌렀을 때
@@ -53,6 +53,7 @@ const HomeScreen = ({ navigation, route }) => {
             const specificData = data[key];
             return {
               key,
+              carrier: specificData.carrier,
               author: specificData.author,
               title: specificData.title,
               description: specificData.description,
@@ -71,13 +72,14 @@ const HomeScreen = ({ navigation, route }) => {
 
   const onBoardItem = (item) => {
     console.log(`아이템을 누르셨습니다.`)
-    navigation.navigate('Board', { username, userid, isAdmin, boardId: item.key})
+    navigation.navigate('Board', { username, userid, isAdmin, carrier, boardId: item.key})
   }
   
   const renderBoard = ({item}) => {   // 게시판 렌더 함수
     return(
       <TouchableOpacity onPress={() => onBoardItem(item)}>
         <View style={{ padding: 10 }}>
+          <Text> {item.carrier}</Text>
           <Text> {item.title}</Text>
           <Text>작성자: {item.author}</Text>
           <Text> {item.description}</Text>

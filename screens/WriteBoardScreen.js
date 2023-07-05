@@ -6,8 +6,8 @@ import styles from '../styles/style';
 const dataRef = ref(database, "boards");   // 디비 설정
 
 const WriteBoardScreen = ({ navigation, route }) => {
-    const { username, userid, isAdmin } = route.params;
-
+    const { username, userid, carrier, isAdmin } = route.params;
+    console.log(carrier)    
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [author] = useState(userid);
@@ -27,18 +27,19 @@ const WriteBoardScreen = ({ navigation, route }) => {
             alert(`제목과 본문을 입력해주세요.`)
         } else {
             try {
-                console.log(currenttime)
                 const newPostRef = push(dataRef);
                 set(newPostRef, {                          // 디비 입력
+                    carrier: carrier,
                     title: title,
                     description: description,
                     author: author,
                     time: currenttime,
                 })
                 alert('게시글 작성이 완료되었습니다.')
-                navigation.navigate('Home', { username, userid, isAdmin })
+                navigation.navigate('Home', { username, userid,carrier, isAdmin })
             }
             catch (error){
+                console.log(error)
                 alert('게시글 작성이 실패하였습니다.', error)
             }
         }

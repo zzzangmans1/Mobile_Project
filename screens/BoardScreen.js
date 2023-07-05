@@ -10,7 +10,7 @@ const dataRef = ref(database, "boards");   // 디비 설정
 
 const BoardScreen = ({ navigation, route }) => {
     
-    const { username, userid, isAdmin, boardId } = route.params;
+    const { username, userid, isAdmin, carrier, boardId } = route.params;
     const [ title, setTitle] = useState('')
     const [ author, setAuthor] = useState('')
     const [ description, setDescription] = useState('')
@@ -29,13 +29,14 @@ const BoardScreen = ({ navigation, route }) => {
     }
     readBoard()
     const onPreBtn = () => {
-        navigation.navigate('Home', {username, userid, isAdmin})
+        navigation.navigate('Home', {username, userid, carrier, isAdmin})
     }
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
             </View>
             <View style={styles.content}>
+                <Text>{carrier}</Text>
                 <Text>{title}</Text>
                 <Text>{author}</Text>
                 <Text>{description}</Text>
