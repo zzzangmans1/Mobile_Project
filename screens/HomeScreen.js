@@ -3,45 +3,49 @@ import { View, Text, Button, SafeAreaView, FlatList, TouchableOpacity } from 're
 
 import styles from '../styles/style';
 
-import {database ,ref,set, push, query, orderByChild, equalTo, get } from "../fb";
+import {database, ref, get} from "../fb";
 
 const dataRef = ref(database, "boards");   // 디비 설정
 
 const HomeScreen = ({ navigation, route }) => {
-
-  useEffect(() => {
-    readData(); // HomeScreen 컴포넌트가 처음 렌더링될 때 readData 함수 실행
-  });
-  
-  const { username, userid, carrier, isAdmin } = route.params
+  const { username, userid, carrier, isAdmin, newData } = route.params
   const [boardData, setBoardData] = useState([])
-  
+  const [carrierType, setCarrierType] = useState('')
   const [showButton, setShowButton] = useState(true)
   const [writeButton] = useState(isAdmin)
   const [isData, setIsData] = useState(false)
+
+  useEffect(() => {
+      readData()
+  });
 
   const onLogout = () => {  // 로그아웃 로직 구현
     navigation.navigate('로그인')
   }
   const onWrite = () => {
     navigation.navigate('WriteBoard', { username, userid, carrier, isAdmin } )
+    readData();
   }
 
   const onSktBtn = () => {  // SKT 버튼을 눌렀을 때
-    setShowButton(false);
+    setShowButton(false)
+    setCarrierType("SKT")
     readData()
   }
   const onKtBtn = () => {  // SKT 버튼을 눌렀을 때
-    setShowButton(false);
+    setShowButton(false)
+    setCarrierType('KT')
     readData()
   }
   const onLGBtn = () => {  // SKT 버튼을 눌렀을 때
-    setShowButton(false);
+    setShowButton(false)
+    setCarrierType('LG')
     readData()
   }
   const readData = async () => {
     try {
       const snapshot = await get(dataRef); // 데이터 읽기
+      console.log('hi')
       if (snapshot.exists()) {
         // 데이터가 존재하는 경우
         setIsData(true)
@@ -51,19 +55,24 @@ const HomeScreen = ({ navigation, route }) => {
         keys.forEach(key => {           // push()로 넣은 값을 다 가져온다.
           const newData = keys.map((key) =>{
             const specificData = data[key];
-            return {
-              key,
-              carrier: specificData.carrier,
-              author: specificData.author,
-              title: specificData.title,
-              description: specificData.description,
-            };
+            console.log(carrierType)
+            if(specificData.carrier === carrierType){
+              return {
+                key,
+                carrier: specificData.carrier,
+                author: specificData.author,
+                title: specificData.title,
+                description: specificData.description,
+              };
+            }
           }) 
-          setBoardData(newData);
+          if (JSON.stringify(newData) !== JSON.stringify(boardData)) {  // 값이 변경되었을 때만 setBoardData 호출
+            setBoardData(newData);
+          }
         });
       } else {
         // 데이터가 존재하지 않는 경우
-        // console.log("데이터가 존재하지 않습니다.");
+        setIsData(false);
       }
     } catch (error) {
       console.error("데이터 읽기 실패:", error);
@@ -71,7 +80,6 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   const onBoardItem = (item) => {
-    console.log(`아이템을 누르셨습니다.`)
     navigation.navigate('Board', { username, userid, isAdmin, carrier, boardId: item.key})
   }
   
@@ -105,6 +113,7 @@ const HomeScreen = ({ navigation, route }) => {
           <View style={styles.content}>
             { writeButton && (    // isAdmin 이 True 여야만 게시글 작성 버튼이 생성
             <Button title="게시글 작성" onPress={onWrite} />
+             
             )}
             {!isData && (
             <Text>아직 게시글이 존재하지 않습니다.</Text>
@@ -113,7 +122,11 @@ const HomeScreen = ({ navigation, route }) => {
               <FlatList
                 data={boardData}
                 renderItem={renderBoard}
-                keyExtractor={(item, index)=> index.toString()}
+                keyExtractor={(item, index)=> {if (typeof index === 'number' && !isNaN(index)) {
+                  return index.toString();
+                } else {
+                  return 'defaultKey';
+                }}}
               />
             )}
           </View>

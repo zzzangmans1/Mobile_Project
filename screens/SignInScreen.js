@@ -28,8 +28,8 @@ const SiginInScreen = ({ navigation }) => {
       const userid = userData[firstUserId].userid
       const isAdmin = userData[firstUserId].isAdmin
       const carrier = userData[firstUserId].carrier
-      
-      navigation.navigate('Home', { username, userid, carrier, isAdmin });
+
+      navigation.navigate('Home', { username, userid, carrier, isAdmin, newData:null});
 
     } else {
       // 로그인 실패 처리

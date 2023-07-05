@@ -3,7 +3,7 @@ import { View, Text, Button, SafeAreaView } from 'react-native';
 
 import styles from '../styles/style';
 
-import {database ,ref,set, push, query, orderByChild, equalTo, get } from "../fb";
+import {database, ref, get } from "../fb";
 
 
 const dataRef = ref(database, "boards");   // 디비 설정

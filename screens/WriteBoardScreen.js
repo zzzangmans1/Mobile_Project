@@ -47,7 +47,14 @@ const WriteBoardScreen = ({ navigation, route }) => {
                     time: currenttime,
                 })
                 alert('게시글 작성이 완료되었습니다.')
-                navigation.navigate('Home', { username, userid,carrier, isAdmin })
+                navigation.navigate('Home', { username, userid,carrier, isAdmin, 
+                    newData: {
+                    carrier: carrier,
+                    title: title,
+                    description: description,
+                    author: author,
+                    time: currenttime,
+                  } })
             }
             catch (error){
                 alert('게시글 작성이 실패하였습니다.', error)
