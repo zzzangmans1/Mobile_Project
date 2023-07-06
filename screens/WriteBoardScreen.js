@@ -8,7 +8,6 @@ const dataRef = ref(database, "boards");   // 디비 설정
 const titleRegex = /^(?!\s)[a-zA-Z0-9가-힣!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
 const descriptionRegex = /^(?!\s)[a-zA-Z0-9가-힣!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
 
-
 const WriteBoardScreen = ({ navigation, route }) => {
 
     const { username, userid, carrier, isAdmin } = route.params;
