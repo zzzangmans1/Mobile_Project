@@ -11,6 +11,7 @@ const dataRef = ref(database, "boards");   // 디비 설정
 const BoardScreen = ({ navigation, route }) => {
     
     const { username, userid, isAdmin, carrier, boardId } = route.params;
+    const [ boardcarrier, setBoardCarrier] = useState('')
     const [ title, setTitle] = useState('')
     const [ author, setAuthor] = useState('')
     const [ description, setDescription] = useState('')
@@ -19,6 +20,7 @@ const BoardScreen = ({ navigation, route }) => {
         try{
             const snapshot = await get(dataRef); // 데이터 읽기
             const data = snapshot.val();
+            setBoardCarrier(data[boardId].carrier)
             setTitle(data[boardId].title)
             setAuthor(data[boardId].author)
             setDescription(data[boardId].description)
@@ -36,7 +38,7 @@ const BoardScreen = ({ navigation, route }) => {
             <View style={styles.header}>
             </View>
             <View style={styles.content}>
-                <Text>{carrier}</Text>
+                <Text>{boardcarrier}</Text>
                 <Text>{title}</Text>
                 <Text>{author}</Text>
                 <Text>{description}</Text>

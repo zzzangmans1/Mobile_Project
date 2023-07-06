@@ -42,7 +42,6 @@ const HomeScreen = ({ navigation, route }) => {
     setCarrierType('LG')
   }
   const readData = async () => {
-    console.log('hi')
     try {
       const snapshot = await get(dataRef); // 데이터 읽기
       if (snapshot.exists()) {
