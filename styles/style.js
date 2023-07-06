@@ -35,6 +35,10 @@ const styles = StyleSheet.create({
     button: {
         flexDirection: 'row',
     },
+    board: {
+        backgroundColor: '#CCE5FF',
+        padding: 10,
+    },
   });
 
   export default styles;

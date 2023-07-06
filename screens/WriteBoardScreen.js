@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, SafeAreaView, Button, TextInput  } from 'react-native';
-import { database, ref, set, push, query, orderByChild, equalTo, get } from "../fb"
+import { database, ref, set, push } from "../fb"
 import styles from '../styles/style';
 
 const dataRef = ref(database, "boards");   // 디비 설정

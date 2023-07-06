@@ -84,7 +84,7 @@ const HomeScreen = ({ navigation, route }) => {
     if (item && item.carrier) {
       return(
         <TouchableOpacity onPress={() => onBoardItem(item)}>
-          <View style={{ padding: 10 }}>
+          <View style={styles.board}>
             <Text> {item.carrier}</Text>
             <Text> {item.title}</Text>
             <Text>작성자: {item.author}</Text>

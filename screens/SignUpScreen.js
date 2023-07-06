@@ -58,6 +58,12 @@ const SignUpScreen = ({ navigation }) => {
             navigation.navigate('로그인');
         }
     };
+
+    const onSignUpFail = () => {
+        navigation.navigate('로그인');
+    }
+
+
     // 아이디 중복, 정규식 체크하는 함수
     const onCheckId = async () => {
         const idQuery = query(dataRef, orderByChild("userid"), equalTo(userid))
@@ -139,6 +145,7 @@ const SignUpScreen = ({ navigation }) => {
                     onChangeText={setBirthday} 
                 />
                 <Button title="완료" onPress={onSignUpSuc}/>
+                <Button title="취소" onPress={onSignUpFail}/>
             </View>
             <View style={styles.footer}>
             </View>
