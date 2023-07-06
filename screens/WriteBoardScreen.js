@@ -13,12 +13,17 @@ const WriteBoardScreen = ({ navigation, route }) => {
 
     const { username, userid, carrier, isAdmin } = route.params;
     
-    const [imageUrl, setImageUrl] = useState('')    // 이미지 경로
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('');
     const [author] = useState(userid);
+    
 
-    const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+    // 권한 요청을 위한 hooks
+    const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions()
+    const [imageUrl, setImageUrl] = useState('')    // 현재 이미지 경로
+    const [ImageWidth, setImageWidth] = useState('');
+    const [ImageHeight, setImageHeight] = useState('');
+
     // 시간 관련
     const now = new Date();
     const year = now.getFullYear();
@@ -30,15 +35,12 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const currenttime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
 
     const onUploadImage = async () => {
-
-        alert('권한을 받았습니다.')
+        // 권한 확인 코드: 권한이 없으면 물어보고, 승인하지 않으면 함수 종료
         if (!status?.granted){
             const permission = await requestPermission();
             if(!permission.granted){
                 return null
             }
-        } else {
-            alert('권한을 받았습니다.')
         }
         const res = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -46,12 +48,19 @@ const WriteBoardScreen = ({ navigation, route }) => {
             quality: 1,
             aspect: [1, 1]
         })
-        if(res.canceled){
-            return null
+        if(res.cancelled){  // 이미지 업로드 취소한 경우
+            return null 
+        } else if (res.assets && res.assets.length > 0) {
+            const selectedAsset = res.assets[0]
+            const { width, height } = selectedAsset // 이미지 크기 가져오기
+            setImageHeight(height)
+            setImageWidth(width)
+            // 선택한 이미지의 크기 출력
+            //alert(`이미지 크기: ${width} x ${height}`)
+        
+            // 이미지 업로드 결과 및 이미지 경로 이벤트
+            setImageUrl(selectedAsset.uri)
         }
-
-        alert(res)
-        setImageUrl(res.uri)
     }
 
     const onWriteSuc = () => {  // 게시판 완료
@@ -96,7 +105,7 @@ const WriteBoardScreen = ({ navigation, route }) => {
             <View style={styles.content}>
                 <Pressable onPress={onUploadImage}>
                     <Text>이미지 업로드하기</Text>
-                    <Image source={{uir: imageUrl}}></Image>
+                    <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200, marginTop: 10, marginLeft: 10 }}/>
                 </Pressable>
                 <TextInput
                     placeholder="제목을 입력해주세요."
