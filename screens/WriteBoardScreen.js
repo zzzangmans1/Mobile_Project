@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker'
-import { View, SafeAreaView, Button, TextInput, Pressable  } from 'react-native';
+import { View, SafeAreaView, Text, Button, TextInput, Pressable, Image  } from 'react-native';
 import { database, ref, set, push } from "../fb"
 import styles from '../styles/style';
 
@@ -13,10 +13,12 @@ const WriteBoardScreen = ({ navigation, route }) => {
 
     const { username, userid, carrier, isAdmin } = route.params;
     
-    const [title, setTitle] = useState('');
+    const [imageUrl, setImageUrl] = useState('')    // 이미지 경로
+    const [title, setTitle] = useState('')
     const [description, setDescription] = useState('');
     const [author] = useState(userid);
 
+    const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
     // 시간 관련
     const now = new Date();
     const year = now.getFullYear();
@@ -28,14 +30,28 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const currenttime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
 
     const onUploadImage = async () => {
-        const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
+        alert('권한을 받았습니다.')
         if (!status?.granted){
             const permission = await requestPermission();
             if(!permission.granted){
                 return null
             }
+        } else {
+            alert('권한을 받았습니다.')
         }
+        const res = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: false,
+            quality: 1,
+            aspect: [1, 1]
+        })
+        if(res.canceled){
+            return null
+        }
+
+        alert(res)
+        setImageUrl(res.uri)
     }
 
     const onWriteSuc = () => {  // 게시판 완료
@@ -80,6 +96,7 @@ const WriteBoardScreen = ({ navigation, route }) => {
             <View style={styles.content}>
                 <Pressable onPress={onUploadImage}>
                     <Text>이미지 업로드하기</Text>
+                    <Image source={{uir: imageUrl}}></Image>
                 </Pressable>
                 <TextInput
                     placeholder="제목을 입력해주세요."
