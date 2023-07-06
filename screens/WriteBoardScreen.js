@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, SafeAreaView, Button, TextInput  } from 'react-native';
+import * as ImagePicker from 'expo-image-picker'
+import { View, SafeAreaView, Button, TextInput, Pressable  } from 'react-native';
 import { database, ref, set, push } from "../fb"
 import styles from '../styles/style';
 
@@ -25,6 +26,17 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
     const currenttime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
+
+    const onUploadImage = async () => {
+        const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+
+        if (!status?.granted){
+            const permission = await requestPermission();
+            if(!permission.granted){
+                return null
+            }
+        }
+    }
 
     const onWriteSuc = () => {  // 게시판 완료
         if(!title || !description){
@@ -66,6 +78,9 @@ const WriteBoardScreen = ({ navigation, route }) => {
             <View style={styles.header}>
             </View>
             <View style={styles.content}>
+                <Pressable onPress={onUploadImage}>
+                    <Text>이미지 업로드하기</Text>
+                </Pressable>
                 <TextInput
                     placeholder="제목을 입력해주세요."
                     value={title}

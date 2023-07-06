@@ -17,6 +17,7 @@ const BoardScreen = ({ navigation, route }) => {
     const [ description, setDescription] = useState('')
 
     const readBoard = async() => {
+        
         try{
             const snapshot = await get(dataRef); // 데이터 읽기
             const data = snapshot.val();
