@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker'
 import { View, SafeAreaView, Text, Button, TextInput, Pressable, Image  } from 'react-native';
-import { database, ref, set, push } from "../fb"
+import { database, firestore,collection, addDoc, ref, set, push } from "../fb"
 import styles from '../styles/style';
+import { async } from '@firebase/util';
 
 const dataRef = ref(database, "boards");   // 디비 설정
 
@@ -17,12 +18,11 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const [description, setDescription] = useState('');
     const [author] = useState(userid);
     
-
     // 권한 요청을 위한 hooks
     const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions()
     const [imageUrl, setImageUrl] = useState('')    // 현재 이미지 경로
-    const [ImageWidth, setImageWidth] = useState('');
-    const [ImageHeight, setImageHeight] = useState('');
+    const [ImageWidth, setImageWidth] = useState('');   // 이미지 Width
+    const [ImageHeight, setImageHeight] = useState(''); // 이미지 Height
 
     // 시간 관련
     const now = new Date();
@@ -34,6 +34,20 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const seconds = now.getSeconds();
     const currenttime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
 
+    const onSaveImage = async (data) => {
+        
+        
+        try{
+            const docRef = await addDoc(collection(firestore, "users"), {
+                first: "Ada",
+                last: "Lovelace",
+                born: 1815
+              });
+              console.log("Document written with ID: ", docRef.id);
+        } catch(error){
+            console.log('데이터 저장 실패', error)
+        }
+    }
     const onUploadImage = async () => {
         // 권한 확인 코드: 권한이 없으면 물어보고, 승인하지 않으면 함수 종료
         if (!status?.granted){
@@ -48,7 +62,7 @@ const WriteBoardScreen = ({ navigation, route }) => {
             quality: 1,
             aspect: [1, 1]
         })
-        if(res.cancelled){  // 이미지 업로드 취소한 경우
+        if(res.canceled){  // 이미지 업로드 취소한 경우
             return null 
         } else if (res.assets && res.assets.length > 0) {
             const selectedAsset = res.assets[0]
@@ -60,6 +74,7 @@ const WriteBoardScreen = ({ navigation, route }) => {
         
             // 이미지 업로드 결과 및 이미지 경로 이벤트
             setImageUrl(selectedAsset.uri)
+            onSaveImage(selectedAsset)
         }
     }
 

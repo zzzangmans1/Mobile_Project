@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-
+import { initializeApp } from "firebase/app"
 import { getDatabase, ref, remove, set, push, query, orderByChild, equalTo, get } from "firebase/database";
+import { getFirestore, collection, addDoc} from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCfVkqOfkxzOehXuoUuJp0wRrFq3DZBnco",
@@ -15,6 +15,10 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 const database = getDatabase(app);
 
-export { database, ref, remove, set, push, query, orderByChild, equalTo, get }
+// Firestore 컬렉션 참조
+const firestore = getFirestore(app);
+
+export { database, firestore, collection, addDoc, ref, remove, set, push, query, orderByChild, equalTo, get }
