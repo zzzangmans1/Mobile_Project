@@ -42,7 +42,9 @@ const styles = StyleSheet.create({
     image: {
         width: 200,
         height: 200,
-        backgroundColor: 'black',
+        marginTop: 10, 
+        marginLeft: 10, 
+        backgroundColor: 'grey',
     }
   });
 

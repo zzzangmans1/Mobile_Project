@@ -3,13 +3,11 @@ import * as ImagePicker from 'expo-image-picker'
 import { View, SafeAreaView, Text, Button, TextInput, Pressable, Image  } from 'react-native';
 import { database, storage, ref,storageRef, set , uploadBytes, push } from "../fb"
 import styles from '../styles/style';
-import { RefreshControlComponent } from 'react-native';
-
 const dataRef = ref(database, "boards");   // 디비 설정
 
 
-const titleRegex = /^(?!\s)[a-zA-Z0-9가-힣!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
-const descriptionRegex = /^(?!\s)[a-zA-Z0-9가-힣!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
+const titleRegex = /^(?!\s)[a-zA-Z0-9가-힣\s!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
+const descriptionRegex = /^(?!\s)[a-zA-Z0-9가-힣\s!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
 
 const WriteBoardScreen = ({ navigation, route }) => {
 
@@ -117,12 +115,12 @@ const WriteBoardScreen = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-            </View>
-            <View style={styles.content}>
                 <Pressable onPress={onUploadImage}>
                     <Text>이미지 업로드하기</Text>
-                    <Image source={{ uri: imageUrl }} style={{ width: 200, height: 200, marginTop: 10, marginLeft: 10 }}/>
+                    <Image source={{ uri: imageUrl }} style={styles.image}/>
                 </Pressable>
+            </View>
+            <View style={styles.content}>
                 <TextInput
                     placeholder="제목을 입력해주세요."
                     value={title}
