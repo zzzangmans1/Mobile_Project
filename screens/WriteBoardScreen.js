@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker'
 import { View, SafeAreaView, Text, Button, TextInput, Pressable, Image  } from 'react-native';
-import { database, firestore,collection, addDoc, ref, set, push } from "../fb"
+import { database, storage, ref,storageRef, set , uploadBytes, push } from "../fb"
 import styles from '../styles/style';
-import { async } from '@firebase/util';
+import { RefreshControlComponent } from 'react-native';
 
 const dataRef = ref(database, "boards");   // 디비 설정
+
 
 const titleRegex = /^(?!\s)[a-zA-Z0-9가-힣!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
 const descriptionRegex = /^(?!\s)[a-zA-Z0-9가-힣!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
@@ -35,18 +36,15 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const currenttime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
 
     const onSaveImage = async (data) => {
+            /** @type {any} */
+        const metadata = {
+        contentType: 'image/jpeg'
+        };// Listen for state changes, errors, and completion of the upload.
+        // Upload file and metadata to the object 'images/mountains.jpg'
+
+        const ref = storageRef(storage, 'images/' + data);
+        const uploadTask = uploadBytes(ref, data.uri, metadata);
         
-        
-        try{
-            const docRef = await addDoc(collection(firestore, "users"), {
-                first: "Ada",
-                last: "Lovelace",
-                born: 1815
-              });
-              console.log("Document written with ID: ", docRef.id);
-        } catch(error){
-            console.log('데이터 저장 실패', error)
-        }
     }
     const onUploadImage = async () => {
         // 권한 확인 코드: 권한이 없으면 물어보고, 승인하지 않으면 함수 종료
