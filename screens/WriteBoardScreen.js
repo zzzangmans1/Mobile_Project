@@ -36,16 +36,19 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const currenttime = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
 
     const onSaveImage = async (data) => {
-            /** @type {any} */
+        const response = await fetch(data);
+        const blob = await response.blob();
+
         const metadata = {
         contentType: 'image/jpeg'
-        };// Listen for state changes, errors, and completion of the upload.
-        // Upload file and metadata to the object 'images/mountains.jpg'
+        };
 
-        const ref = storageRef(storage, 'images/' + data);
-        const uploadTask = uploadBytes(ref, data.uri, metadata);
+        const ref = storageRef(storage, 'images/my-image.jpeg');
+        uploadBytes(ref, blob, metadata);
+        console.log('이미지 업로드 완료');
         
     }
+
     const onUploadImage = async () => {
         // 권한 확인 코드: 권한이 없으면 물어보고, 승인하지 않으면 함수 종료
         if (!status?.granted){
@@ -64,15 +67,15 @@ const WriteBoardScreen = ({ navigation, route }) => {
             return null 
         } else if (res.assets && res.assets.length > 0) {
             const selectedAsset = res.assets[0]
+            selectedAsset.fileName
             const { width, height } = selectedAsset // 이미지 크기 가져오기
             setImageHeight(height)
             setImageWidth(width)
             // 선택한 이미지의 크기 출력
             //alert(`이미지 크기: ${width} x ${height}`)
-        
             // 이미지 업로드 결과 및 이미지 경로 이벤트
             setImageUrl(selectedAsset.uri)
-            onSaveImage(selectedAsset)
+            onSaveImage(selectedAsset.uri)
         }
     }
 

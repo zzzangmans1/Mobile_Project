@@ -1,9 +1,9 @@
-import { useId, useState } from 'react';
-import { View, Text, Button, SafeAreaView } from 'react-native';
+import { useState } from 'react';
+import { View, Text, Button, SafeAreaView, Image } from 'react-native';
 
 import styles from '../styles/style';
 
-import {database, ref, get } from "../fb";
+import {database, ref, get, storage, getDownloadURL, storageRef } from "../fb";
 
 
 const dataRef = ref(database, "boards");   // 디비 설정
@@ -15,10 +15,16 @@ const BoardScreen = ({ navigation, route }) => {
     const [ title, setTitle] = useState('')
     const [ author, setAuthor] = useState('')
     const [ description, setDescription] = useState('')
+    
+    const imageRef = storageRef(storage, 'images/my-image.jpeg');
+    const [imageUrl, setImageUrl] = useState('')
 
     const readBoard = async() => {
-        
         try{
+            const imageURL = await getDownloadURL(imageRef);
+            console.log(imageURL)
+            console.log(imageUrl)
+            setImageUrl(imageURL)
             const snapshot = await get(dataRef); // 데이터 읽기
             const data = snapshot.val();
             setBoardCarrier(data[boardId].carrier)
@@ -37,6 +43,7 @@ const BoardScreen = ({ navigation, route }) => {
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
+                <Image source={{ uri: imageUrl }} style={styles.image} />
             </View>
             <View style={styles.content}>
                 <Text>{boardcarrier}</Text>

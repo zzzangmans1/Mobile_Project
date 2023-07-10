@@ -39,6 +39,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#CCE5FF',
         padding: 10,
     },
+    image: {
+        width: 200,
+        height: 200,
+        backgroundColor: 'black',
+    }
   });
 
   export default styles;

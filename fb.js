@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app"
 import { getAnalytics } from "firebase/analytics";
 import { getDatabase, ref, remove, set, push, query, orderByChild, equalTo, get } from "firebase/database";
-import { getStorage, uploadBytes ,ref as storageRef } from "firebase/storage";
+import { getStorage, uploadBytes ,ref as storageRef, getDownloadURL  } from "firebase/storage";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCfVkqOfkxzOehXuoUuJp0wRrFq3DZBnco",
@@ -24,4 +24,4 @@ const database = getDatabase(app);
 // Initialize Cloud Storage and get a reference to the service
 const storage = getStorage(app);
 
-export { database,storage, uploadBytes ,storageRef, ref,  remove, set, push, query, orderByChild, equalTo, get }
+export { database,storage, uploadBytes , getDownloadURL ,storageRef, ref,  remove, set, push, query, orderByChild, equalTo, get }
