@@ -3,8 +3,9 @@ import * as ImagePicker from 'expo-image-picker'
 import { View, SafeAreaView, Text, Button, TextInput, Pressable, Image  } from 'react-native';
 import { database, storage, ref,storageRef, set , uploadBytes, push } from "../fb"
 import styles from '../styles/style';
-const dataRef = ref(database, "boards");   // 디비 설정
 
+const dataRef = ref(database, "boards");   // 디비 설정
+const newPostRef = push(dataRef)
 
 const titleRegex = /^(?!\s)[a-zA-Z0-9가-힣\s!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
 const descriptionRegex = /^(?!\s)[a-zA-Z0-9가-힣\s!@#$%^&*(),.?":{}|<>]+(?<!\s)$/;
@@ -16,7 +17,6 @@ const WriteBoardScreen = ({ navigation, route }) => {
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('');
     const [author] = useState(userid);
-    
     // 권한 요청을 위한 hooks
     const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions()
     const [imageUrl, setImageUrl] = useState('')    // 현재 이미지 경로
@@ -41,7 +41,7 @@ const WriteBoardScreen = ({ navigation, route }) => {
         contentType: 'image/jpeg'
         };
 
-        const ref = storageRef(storage, 'images/my-image.jpeg');
+        const ref = storageRef(storage,`BoardImages/${newPostRef.key}/1.jpeg` );
         uploadBytes(ref, blob, metadata);
         console.log('이미지 업로드 완료');
         
@@ -88,13 +88,14 @@ const WriteBoardScreen = ({ navigation, route }) => {
             setDescription('')
         }else {
             try {
-                const newPostRef = push(dataRef);
                 set(newPostRef, {                          // 디비 입력
                     carrier: carrier,
                     title: title,
                     description: description,
                     author: author,
                     time: currenttime,
+                    images: newPostRef.key,
+                    imagescount : 0
                 })
                 alert('게시글 작성이 완료되었습니다.')
                 navigation.navigate('Home', { username, userid,carrier, isAdmin, 
