@@ -116,10 +116,12 @@ const WriteBoardScreen = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Pressable onPress={onUploadImage}>
+                <Pressable onPress={onUploadImage} style={{
+        justifyContent: 'center',
+        alignItems: 'center',}}>
                     <Text>이미지 업로드하기</Text>
-                    <Image source={{ uri: imageUrl }} style={styles.image}/>
                 </Pressable>
+                <Image source={{ uri: imageUrl }} style={styles.image}/>
             </View>
             <View style={styles.content}>
                 <TextInput
