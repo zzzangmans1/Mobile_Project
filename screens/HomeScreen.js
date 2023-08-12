@@ -77,6 +77,7 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   const onBoardItem = (item) => {
+    console.log(`home ${item.key}`)
     navigation.navigate('Board', { username, userid, isAdmin, carrier, boardId: item.key})
   }
   

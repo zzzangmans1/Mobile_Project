@@ -96,7 +96,7 @@ const WriteBoardScreen = ({ navigation, route }) => {
                     time: currenttime,
                     images: newPostRef.key,
                     imagescount : 0
-                })
+                })  
                 alert('게시글 작성이 완료되었습니다.')
                 navigation.navigate('Home', { username, userid,carrier, isAdmin, 
                     newData: {

@@ -16,10 +16,11 @@ const BoardScreen = ({ navigation, route }) => {
     const [ author, setAuthor] = useState('')
     const [ description, setDescription] = useState('')
     
-    const imageRef = storageRef(storage, 'images/my-image.jpeg');
+    const imageRef = storageRef(storage, 'BoardImages/' + boardId);
     const [imageUrl, setImageUrl] = useState('')
 
     const readBoard = async() => {
+        console.log(`boardID : ${boardId}`)
         try{
             const imageURL = await getDownloadURL(imageRef);
             console.log(imageURL)
