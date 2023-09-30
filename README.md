@@ -35,3 +35,14 @@ utils: 앱에서 사용되는 유틸리티 함수들이 위치합니다. API 호
 data: 앱에서 사용되는 가상의 데이터를 담은 파일들이 위치합니다. 제품 정보, 주문 내역 등의 데이터를 포함합니다.
 assets: 앱에서 사용되는 이미지, 아이콘 등의 에셋 파일들이 위치합니다.
 App.js: 앱의 진입점이 되는 파일입니다. 네비게이션 컨테이너를 설정하고 화면 구성에 필요한 파일들을 불러옵니다.
+
+## Usage
+
+![image](https://github.com/zzzangmans1/Mobile_Project/assets/52357235/dad28f03-7edc-4f22-9e03-f01b1c3a4120)
+
+![image](https://github.com/zzzangmans1/Mobile_Project/assets/52357235/896a0c5c-dedb-47ed-abb0-25c366c175e8)
+
+![image](https://github.com/zzzangmans1/Mobile_Project/assets/52357235/2fba6b0d-7b50-48be-a721-88f1e01a3714)
+
+![image](https://github.com/zzzangmans1/Mobile_Project/assets/52357235/7620b4a8-9f49-4b99-8aec-89aabdf28f85)
+
